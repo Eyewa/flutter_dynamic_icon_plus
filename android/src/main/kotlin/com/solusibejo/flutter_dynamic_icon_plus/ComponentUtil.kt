@@ -31,6 +31,7 @@ object ComponentUtil {
         componentNameString: String,
     ) {
         val componentName = ComponentName(context, componentNameString)
+        Log.d("changeAppIcon", "disable component: $componentNameString")
 
         packageManager.setComponentEnabledSetting(
             componentName,
@@ -160,6 +161,12 @@ object ComponentUtil {
                     if(currentlyEnabled?.name != name){
                         setupIcon(context, packageManager, packageName, name, currentlyEnabled?.name)
                     }
+                }
+            } else {
+                //disable current alias activity and enable the default one
+                if(currentlyEnabled != null){
+                    disable(context, packageManager, ComponentName(packageName, currentlyEnabled.name).className)
+                    enable(context, packageManager, ComponentName(packageName, currentlyEnabled.targetActivity).className)
                 }
             }
         }
